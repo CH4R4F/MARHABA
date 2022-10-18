@@ -5,7 +5,7 @@
  * @return {number} - HTTP status code
  */
 function getHttpStatusCode({ error, res }) {
-  const errorStatusCode = error.status || error.errorStatusCode;
+  const errorStatusCode = error.status || error.statusCode;
   if (isErrorStatusCode(errorStatusCode)) {
     return errorStatusCode;
   }

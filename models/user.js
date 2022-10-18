@@ -5,10 +5,12 @@ const userSchema = new mongoose.Schema(
     first_name: {
       type: String,
       required: [true, "Please add your first name"],
+      trim: true,
     },
     last_name: {
       type: String,
       required: [true, "Please add your last name"],
+      trim: true,
     },
     email: {
       type: String,
@@ -21,12 +23,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please add your password"],
       minlength: 6,
+      trim: true,
     },
     image: {
       type: String,
+      default: "default.jpg",
     },
     verified: {
       type: Boolean,
+      default: false,
     },
     verification_token: {
       type: String,

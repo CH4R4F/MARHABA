@@ -1,5 +1,5 @@
-const roleModel = require("../models/role");
-const userModel = require("../models/user");
+const RoleModel = require("../models/role");
+const UserModel = require("../models/user");
 const connectDb = require("./db");
 const bcrypt = require("bcryptjs");
 const roles = process.env.ROLES.split(",");
@@ -8,6 +8,7 @@ const defaultUser = {
   last_name: process.env.DEFAULT_USER_LAST_NAME,
   email: process.env.DEFAULT_USER_EMAIL,
   password: process.env.DEFAULT_USER_PASSWORD,
+  verified: true,
 };
 
 async function initDb() {
@@ -18,7 +19,7 @@ async function initDb() {
 
 async function createDefaultRoles() {
   // check if role collection is empty
-  roleModel.countDocuments({}, (err, count) => {
+  RoleModel.countDocuments({}, (err, count) => {
     if (err) {
       console.log(err);
       process.exit(1);
@@ -26,7 +27,7 @@ async function createDefaultRoles() {
     if (count === 0) {
       // insert roles
       roles.forEach(async (role) => {
-        const newRole = new roleModel({ role });
+        const newRole = new RoleModel({ role });
         await newRole.save();
       });
     }
@@ -35,7 +36,7 @@ async function createDefaultRoles() {
 
 async function createDefaultUser() {
   // create and assign a role to default user if not exists
-  userModel.findOne({ email: defaultUser.email }, async (err, user) => {
+  UserModel.findOne({ email: defaultUser.email }, async (err, user) => {
     if (err) {
       console.log(err);
       process.exit(1);
@@ -43,8 +44,8 @@ async function createDefaultUser() {
     if (!user) {
       const salt = bcrypt.genSaltSync(10);
       defaultUser.password = await bcrypt.hash(defaultUser.password, salt);
-      const newUser = new userModel(defaultUser);
-      const userRole = await roleModel.findOne({ role: "Manager" });
+      const newUser = new UserModel(defaultUser);
+      const userRole = await RoleModel.findOne({ role: "Manager" });
       newUser._roles = [userRole._id];
       await newUser.save();
     }
