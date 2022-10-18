@@ -4,6 +4,9 @@ const cors = require("cors");
 const fs = require("fs");
 const morgan = require("morgan");
 const errorHandler = require("./middlewares/errorHandler");
+const connectDb = require("./config/db");
+
+connectDb();
 
 const app = express();
 // use initial middlewares
