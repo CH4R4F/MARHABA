@@ -12,16 +12,15 @@ const protect = async (req, res, next) => {
       // verify token
       try {
         const decode = jwt.verify(token, process.env.JWT_SECRET);
+        // Get userId from token and add it to req object
+        req.user = await UserModel.findOne({ _id: decode.userId }).select(
+          "-password"
+        );
       } catch (err) {
         const error = new Error("Invalid token");
         error.status = 401;
         return next(error);
       }
-
-      // Get userId from token and add it to req object
-      req.user = await UserModel.findOne({ _id: decode.userId }).select(
-        "-password"
-      );
 
       next();
     } catch (error) {
