@@ -5,7 +5,10 @@ const User = require("../models/user");
 const Role = require("../models/role");
 const roles = process.env.ROLES.split(",");
 const tokenGen = require("../utils/tokenGen");
-const { sendConfirmationEmail } = require("../utils/emailSender");
+const {
+  sendConfirmationEmail,
+  sendResetPasswordEmail,
+} = require("../utils/emailSender");
 
 // method: POST
 // url: /api/auth/login
@@ -84,8 +87,27 @@ const register = async (req, res, next) => {
 // method: POST
 // url: /api/auth/forgetpassword
 // access: Public
-const forgetPassword = (req, res) => {
-  res.status(200).send("post to forgetpassword done");
+const forgetPassword = async (req, res, next) => {
+  const email = req.body.email;
+  if (!email) {
+    const error = new Error("Email is required");
+    error.status = 400;
+    return next(error);
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    const error = new Error("Invalid email");
+    error.status = 404;
+    return next(error);
+  }
+
+  const reset_token = tokenGen(user._id); // by default the token expires in 10 minutes
+  sendResetPasswordEmail(user.first_name, user.email, reset_token);
+
+  res.status(200).json({
+    success: true,
+  });
 };
 
 // method: POST
@@ -96,6 +118,9 @@ const resetPassword = (req, res) => {
   res.status(200).send("post to resetpassword done with token " + token);
 };
 
+// method: GET
+// url: /api/auth/confirm/:token
+// access: Public
 const verifyEmail = async (req, res, next) => {
   const token = req.params.token;
   const user = await User.findOne({ verification_token: token });

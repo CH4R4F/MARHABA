@@ -26,4 +26,18 @@ async function sendConfirmationEmail(name, email, token) {
   console.log("verifiction email was sent");
 }
 
-module.exports = { sendConfirmationEmail };
+async function sendResetPasswordEmail(name, email, token) {
+  const mailOptions = {
+    from: email,
+    to: email,
+    subject: "Reset Password",
+    html: `<h1>Hello ${name}</h1>
+    <p>Please click on the link below to reset your password</p>
+    <a href="${host}/api/auth/resetpassword/${token}">Reset Password</a>`,
+  };
+
+  await transporter.sendMail(mailOptions);
+  console.log("reset password email was sent");
+}
+
+module.exports = { sendConfirmationEmail, sendResetPasswordEmail };
