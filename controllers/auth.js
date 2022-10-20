@@ -5,6 +5,7 @@ const User = require("../models/user");
 const Role = require("../models/role");
 const roles = process.env.ROLES.split(",");
 const tokenGen = require("../utils/tokenGen");
+const jwt = require("jsonwebtoken");
 const {
   sendConfirmationEmail,
   sendResetPasswordEmail,
@@ -44,7 +45,7 @@ const register = async (req, res, next) => {
 
     // get user role's id
     const userRole = await Role.findOne({ role });
-    if (!roles.includes(userRole.role)) {
+    if (!roles.includes(role)) {
       const error = new Error("Oops, there is no role with name " + role);
       error.status = 400;
       return next(error);
@@ -113,9 +114,42 @@ const forgetPassword = async (req, res, next) => {
 // method: POST
 // url: /api/auth/resetpassword/:token
 // access: Public
-const resetPassword = (req, res) => {
+const resetPassword = async (req, res, next) => {
   const token = req.params.token;
-  res.status(200).send("post to resetpassword done with token " + token);
+  const password = req.body.password;
+
+  if (!password) {
+    const error = new Error("Password is required");
+    error.status = 400;
+    return next(error);
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded);
+    const user = await User.findOne({ _id: decoded.userId });
+    if (!user) {
+      const error = new Error("Invalid token");
+      error.status = 404;
+      return next(error);
+    }
+
+    // hash the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    user.password = hashedPassword;
+    await user.save();
+  } catch (e) {
+    const error = new Error("Invalid token");
+    error.code = "INVALID_TOKEN";
+    error.status = 401;
+    return next(error);
+  }
+
+  res.status(200).json({
+    success: true,
+  });
 };
 
 // method: GET
