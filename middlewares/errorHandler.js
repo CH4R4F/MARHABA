@@ -19,10 +19,13 @@ function errorHandler(error, req, res, next) {
     return next(error);
   }
 
+  // check if there is a error code (in case of jwt-expired or unAuthorized)
+  const code = error.code || undefined;
   const errorResponse = {
     statusCode: getHttpStatusCode({ error, res }),
     error: undefined,
     message: error.message,
+    code: code,
   };
 
   // hide error details in case of running the app in production
