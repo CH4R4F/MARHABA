@@ -4,6 +4,7 @@ const {
   register,
   forgetPassword,
   resetPassword,
+  verifyEmail,
 } = require("../../controllers/auth");
 
 // api/auth/login
@@ -17,5 +18,8 @@ router.post("/forgetpassword", forgetPassword);
 
 // api/auth/resetpassword/:token
 router.post("/resetpassword/:token", resetPassword);
+
+// api/auth/confirm/:token
+router.get("/confirm/:token", verifyEmail);
 
 module.exports = router;

@@ -3,14 +3,20 @@ const UserModel = require("../models/user");
 
 const protect = async (req, res, next) => {
   let token = null;
-  const authHeader = req.authorization;
+  const authHeader = req.headers.authorization;
   if (authHeader && authHeader.startsWith("Bearer")) {
     try {
       // get token
       token = authHeader.split(" ")[1];
 
       // verify token
-      const decode = jwt.verify(token, process.env.JWT_SECRET);
+      try {
+        const decode = jwt.verify(token, process.env.JWT_SECRET);
+      } catch (err) {
+        const error = new Error("Invalid token");
+        error.status = 401;
+        return next(error);
+      }
 
       // Get userId from token and add it to req object
       req.user = await UserModel.findOne({ _id: decode.userId }).select(
