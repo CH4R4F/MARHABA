@@ -1,8 +1,9 @@
 // method: POST
-// url: /api/user/client/:client
+// url: /api/user/client/me
 // access: Private - [Manager, Client]
 const getClientInfo = (req, res) => {
-  res.status(200).send(req.params.client);
+  console.log(`Bonjour ${req.user.firet_name}, votre rôle est : Client`);
+  res.end();
 };
 
 module.exports = {

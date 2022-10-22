@@ -13,9 +13,9 @@ const protect = async (req, res, next) => {
       try {
         const decode = jwt.verify(token, process.env.JWT_SECRET);
         // Get userId from token and add it to req object
-        req.user = await UserModel.findOne({ _id: decode.userId }).select(
-          "-password"
-        );
+        req.user = await UserModel.findOne({ _id: decode.userId })
+          .select("-password")
+          .populate("_roles");
       } catch (err) {
         const error = new Error("Invalid token");
         error.code = "INVALID_TOKEN";
@@ -23,10 +23,10 @@ const protect = async (req, res, next) => {
         return next(error);
       }
 
-      next();
+      return next();
     } catch (error) {
       res.status(401);
-      next(error);
+      return next(error);
     }
   }
 
@@ -37,4 +37,40 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const authorizeManager = (req, res, next) => {
+  if (req.user.role !== "Manager") {
+    const error = new Error("Not Authorized");
+    error.status = 401;
+    next(error);
+  }
+  next();
+};
+
+const authorizeClient = async (req, res, next) => {
+  const roles = req.user._roles.map((role) => role.role);
+
+  console.log(roles);
+
+  if (!roles.includes("Client")) {
+    const error = new Error("Not Authorized");
+    error.status = 401;
+    next(error);
+  }
+  next();
+};
+
+const authorizeDeliveryman = (req, res, next) => {
+  if (req.user.role !== "Deliveryman") {
+    const error = new Error("Not Authorized");
+    error.status = 401;
+    next(error);
+  }
+  next();
+};
+
+module.exports = {
+  protect,
+  authorizeManager,
+  authorizeClient,
+  authorizeDeliveryman,
+};
