@@ -2,7 +2,8 @@
 // url: /api/user/client/me
 // access: Private - [Manager, Client]
 const getClientInfo = (req, res) => {
-  console.log(`Bonjour ${req.user.firet_name}, votre rôle est : Client`);
+  console.log(req.user);
+  console.log(`Bonjour ${req.user.first_name}, votre rôle est : Client`);
   res.end();
 };
 

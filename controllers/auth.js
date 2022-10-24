@@ -193,6 +193,7 @@ const verifyEmail = async (req, res, next) => {
   }
 
   user.verified = true;
+  user.verification_token = null;
   await user.save();
 
   res.status(200).json({
