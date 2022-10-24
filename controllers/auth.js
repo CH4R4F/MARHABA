@@ -14,8 +14,36 @@ const {
 // method: POST
 // url: /api/auth/login
 // access: Public
-const login = (req, res) => {
-  res.status(200).send("post to login done");
+const login = async (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  try {
+    // get the user
+    const user = await User.findOne({ email });
+    if (!user) {
+      const error = new Error("Invalid email or password");
+      error.status = 404;
+      return next(error);
+    }
+
+    // check if the user is correct
+    const isCorrect = await bcrypt.compare(password, user.password);
+    if (!isCorrect) {
+      const error = new Error("Invalid email or password");
+      error.status = 404;
+      return next(error);
+    }
+
+    // login the user and send the token
+    res.status(200).json({
+      success: true,
+      user,
+      token: tokenGen(user._id, "1d"),
+    });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 // method: POST
