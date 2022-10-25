@@ -109,6 +109,7 @@ const register = async (req, res, next) => {
       token: tokenGen(save._id),
     });
   } catch (error) {
+    error.status = 400;
     next(error);
   }
 };

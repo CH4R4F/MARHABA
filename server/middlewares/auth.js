@@ -49,8 +49,6 @@ const authorizeManager = (req, res, next) => {
 const authorizeClient = async (req, res, next) => {
   const roles = req.user._roles.map((role) => role.role);
 
-  console.log(roles);
-
   if (!roles.includes("Client")) {
     const error = new Error("Not Authorized");
     error.status = 401;
@@ -60,7 +58,9 @@ const authorizeClient = async (req, res, next) => {
 };
 
 const authorizeDeliveryman = (req, res, next) => {
-  if (req.user.role !== "Deliveryman") {
+  const roles = req.user._roles.map((role) => role.role);
+
+  if (!roles.includes("Deliveryman")) {
     const error = new Error("Not Authorized");
     error.status = 401;
     next(error);

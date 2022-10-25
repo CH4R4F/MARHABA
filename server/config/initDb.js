@@ -45,7 +45,9 @@ async function createDefaultUser() {
       const salt = bcrypt.genSaltSync(10);
       defaultUser.password = await bcrypt.hash(defaultUser.password, salt);
       const newUser = new UserModel(defaultUser);
-      const userRole = await RoleModel.findOne({ role: "Manager" });
+      const userRole = await RoleModel.findOne({
+        role: process.env.DEFAULT_ROLE,
+      });
       newUser._roles = [userRole._id];
       await newUser.save();
     }
