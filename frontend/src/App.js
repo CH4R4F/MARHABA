@@ -1,11 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import {
-  WelcomePage,
-  LoginPage,
-  RegisterPage,
-  CompleteRegistrationPage,
-} from "./pages/index";
+import { WelcomePage, LoginPage, RegisterPage, CompleteRegistrationPage } from "./pages/index";
 
 const App = () => (
   <main>
