@@ -6,10 +6,7 @@ const Role = require("../models/role");
 const roles = process.env.ROLES.split(",");
 const tokenGen = require("../utils/tokenGen");
 const jwt = require("jsonwebtoken");
-const {
-  sendConfirmationEmail,
-  sendResetPasswordEmail,
-} = require("../utils/emailSender");
+const { sendConfirmationEmail, sendResetPasswordEmail } = require("../utils/emailSender");
 
 // method: POST
 // url: /api/auth/login
@@ -54,19 +51,14 @@ const register = async (req, res, next) => {
   let last_name = req.body.last_name || "";
   let email = req.body.email || "";
   let password = req.body.password || "";
-  let role = req.body.role || "Client";
+  let role = "Client";
   try {
-    new InputValidation().registerValidation(
-      first_name,
-      last_name,
-      email,
-      password
-    );
+    new InputValidation().registerValidation(first_name, last_name, email, password);
 
     // check if the user already exists
     const user = await User.findOne({ email });
     if (user) {
-      const error = new Error("User already exists");
+      const error = new Error("User with this email already exists");
       error.status = 400;
       return next(error);
     }
@@ -105,7 +97,7 @@ const register = async (req, res, next) => {
     // send success
     res.status(201).json({
       success: true,
-      body: save,
+      user: save,
       token: tokenGen(save._id),
     });
   } catch (error) {
