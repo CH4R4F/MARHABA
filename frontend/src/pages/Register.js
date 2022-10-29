@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Input from "../components/common/Input";
 import InputValidation from "../utils/InputValidation";
 import { registerUser } from "../utils/requests";
 import { saveItem } from "../utils/localstorage";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthProvider";
 
 const boilerplate = {
   first_name: "",
@@ -17,6 +18,7 @@ const boilerplate = {
 const Register = () => {
   const [error, setError] = useState({ ...boilerplate, registration: "" });
   const [user, setUser] = useState({ ...boilerplate });
+  const { setAuth } = useContext(AuthContext);
 
   const navigate = useNavigate();
 
@@ -61,15 +63,16 @@ const Register = () => {
       const _token = data.token;
       saveItem("token", _token);
       saveItem("user", data.user);
+      setAuth({ token: _token, user: data.user });
       navigate("/dashboard");
     }
   }
 
   return (
-    <div className="hero min-h-screen bg-base-200">
+    <div className="hero min-h-screen">
       <div className="container mx-auto">
         <div className="flex justify-center px-6 my-12">
-          <div className="w-full xl:w-3/4 lg:w-11/12 flex">
+          <div className="w-full xl:w-3/4 lg:w-11/12 flex shadow-2xl">
             <div
               className="w-full h-auto bg-gray-400 hidden lg:block lg:w-5/12 bg-cover rounded-l-lg"
               style={{
