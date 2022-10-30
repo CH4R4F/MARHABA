@@ -1,6 +1,8 @@
 import HomePage from "./Home";
 import LoginPage from "./Login";
 import RegisterPage from "./Register";
-import CompleteRegistrationPage from "./CompleteRegistration";
+import ProfilePage from "./Profile";
+import DashboardPage from "./Dashboard.js";
+import NotFoundPage from "./NotFound.js";
 
-export { HomePage, LoginPage, RegisterPage, CompleteRegistrationPage };
+export { HomePage, LoginPage, RegisterPage, ProfilePage, DashboardPage, NotFoundPage };

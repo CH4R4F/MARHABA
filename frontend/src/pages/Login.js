@@ -1,10 +1,9 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Input from "../components/common/Input";
-import { Link, useNavigate } from "react-router-dom";
-import AuthContext from "../context/AuthProvider";
-import InputValidation from "../utils/InputValidation";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { loginUser } from "../utils/requests";
 import { saveItem } from "../utils/localstorage";
+import useAuth from "../hooks/useAuth";
 
 let boilerplate = {
   email: "",
@@ -14,38 +13,28 @@ let boilerplate = {
 const Login = () => {
   const [user, setUser] = useState({ ...boilerplate });
   const [error, setError] = useState({ ...boilerplate, login: "" });
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
 
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from || "/";
 
   async function handleSubmit(e) {
     e.preventDefault();
-    let err = false;
     const { email, password } = user;
-    if (!InputValidation.isValidEmail(email)) {
-      setError({ ...error, email: "please enter a valid email adress" });
-      err = true;
-    }
 
-    if (!InputValidation.isValidPassword(password)) {
-      setError({ ...error, password: "password should be atleast 8 characters" });
-      err = true;
+    let data;
+    try {
+      data = await loginUser(user);
+    } catch (error) {
+      const errorMessage = error?.response?.data?.message || "something went wrong";
+      setError({ ...error, login: errorMessage });
+      return;
     }
-
-    if (!err) {
-      let data;
-      try {
-        data = await loginUser(user);
-      } catch (error) {
-        const errorMessage = error?.response?.data?.message || "something went wrong";
-        setError({ ...error, login: errorMessage });
-        return;
-      }
-      saveItem("token", data.token);
-      saveItem("user", data.user);
-      setAuth({ token: data.token, user: data.user });
-      navigate("/dashboard");
-    }
+    saveItem("token", data.token);
+    saveItem("user", data.user);
+    setAuth({ token: data.token, user: data.user });
+    navigate(from, { replace: true });
   }
 
   return (
