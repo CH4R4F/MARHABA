@@ -9,6 +9,7 @@ const defaultUser = {
   email: process.env.DEFAULT_USER_EMAIL,
   password: process.env.DEFAULT_USER_PASSWORD,
   verified: true,
+  role: process.env.DEFAULT_ROLE,
 };
 
 async function initDb() {
@@ -46,7 +47,7 @@ async function createDefaultUser() {
       defaultUser.password = await bcrypt.hash(defaultUser.password, salt);
       const newUser = new UserModel(defaultUser);
       const userRole = await RoleModel.findOne({
-        role: process.env.DEFAULT_ROLE,
+        role: defaultUser.role,
       });
       newUser._roles = [userRole._id];
       await newUser.save();

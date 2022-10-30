@@ -17,7 +17,7 @@ const login = async (req, res, next) => {
 
   try {
     // get the user
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate("_roles");
     if (!user) {
       const error = new Error("Invalid email or password");
       error.status = 404;
