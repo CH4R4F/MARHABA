@@ -9,6 +9,7 @@ import {
   NotFoundPage,
   ForgetPasswordPage,
   ResetPasswordPage,
+  VerifyUser,
 } from "./pages/index";
 import RequireAuth from "./components/auth/RequireAuth";
 
@@ -22,6 +23,7 @@ const App = () => (
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forget-password" element={<ForgetPasswordPage />} />
         <Route path="/api/auth/resetpassword/:token" element={<ResetPasswordPage />} />
+        <Route path="/api/auth/confirm/:token" element={<VerifyUser />} />
         <Route path="unauthorized" element={<NotFoundPage />} />
         {/* private routes */}
         <Route element={<RequireAuth roles={["Client", "Deliveryman"]} />}>

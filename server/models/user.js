@@ -35,7 +35,6 @@ const userSchema = new mongoose.Schema(
     },
     verification_token: {
       type: String,
-      unique: true,
     },
     _roles: [
       {

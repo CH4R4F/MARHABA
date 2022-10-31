@@ -7,9 +7,9 @@ import "./index.css";
 const rootElement = ReactDOM.createRoot(document.getElementById("root"));
 
 rootElement.render(
-  <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <AuthProvider>
+    <App />
+  </AuthProvider>
+  // </React.StrictMode>
 );

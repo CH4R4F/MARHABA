@@ -6,6 +6,7 @@ import DashboardPage from "./Dashboard.js";
 import NotFoundPage from "./NotFound.js";
 import ForgetPasswordPage from "./ForgetPassword";
 import ResetPasswordPage from "./ResetPassword";
+import VerifyUser from "./VerifyUser";
 
 export {
   HomePage,
@@ -16,4 +17,5 @@ export {
   NotFoundPage,
   ForgetPasswordPage,
   ResetPasswordPage,
+  VerifyUser,
 };

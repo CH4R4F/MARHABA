@@ -64,7 +64,7 @@ const Register = () => {
       saveItem("token", _token);
       saveItem("user", data.user);
       setAuth({ token: _token, user: data.user });
-      navigate("/dashboard");
+      navigate("/");
     }
   }
 

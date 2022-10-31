@@ -1,11 +1,5 @@
 const router = require("express").Router();
-const {
-  login,
-  register,
-  forgetPassword,
-  resetPassword,
-  verifyEmail,
-} = require("../../controllers/auth");
+const { login, register, forgetPassword, resetPassword, verifyEmail } = require("../../controllers/auth");
 
 // api/auth/login
 router.post("/login", login);

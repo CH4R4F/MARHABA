@@ -20,3 +20,8 @@ export async function resetPassword(token, password) {
   const res = await axios.post(`${host}/api/auth/resetpassword/${token}`, password);
   return res.data;
 }
+
+export async function verifyUserByToken(token) {
+  const res = await axios.get(`${host}/api/auth/confirm/${token}`);
+  return res.data;
+}

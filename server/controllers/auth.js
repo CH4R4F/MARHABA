@@ -178,6 +178,12 @@ const resetPassword = async (req, res, next) => {
 // access: Public
 const verifyEmail = async (req, res, next) => {
   const token = req.params.token;
+  console.log(token);
+  if (!token) {
+    const error = new Error("Invalid token");
+    error.status = 404;
+    return next(error);
+  }
   const user = await User.findOne({ verification_token: token });
   if (!user) {
     const error = new Error("Invalid token");
