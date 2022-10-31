@@ -5,5 +5,15 @@ import ProfilePage from "./Profile";
 import DashboardPage from "./Dashboard.js";
 import NotFoundPage from "./NotFound.js";
 import ForgetPasswordPage from "./ForgetPassword";
+import ResetPasswordPage from "./ResetPassword";
 
-export { HomePage, LoginPage, RegisterPage, ProfilePage, DashboardPage, NotFoundPage, ForgetPasswordPage };
+export {
+  HomePage,
+  LoginPage,
+  RegisterPage,
+  ProfilePage,
+  DashboardPage,
+  NotFoundPage,
+  ForgetPasswordPage,
+  ResetPasswordPage,
+};

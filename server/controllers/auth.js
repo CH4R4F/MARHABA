@@ -150,7 +150,7 @@ const resetPassword = async (req, res, next) => {
     console.log(decoded);
     const user = await User.findOne({ _id: decoded.userId });
     if (!user) {
-      const error = new Error("Invalid token");
+      const error = new Error("Invalid reset token");
       error.status = 404;
       return next(error);
     }
@@ -162,7 +162,7 @@ const resetPassword = async (req, res, next) => {
     user.password = hashedPassword;
     await user.save();
   } catch (e) {
-    const error = new Error("Invalid token");
+    const error = new Error("Invalid reset token");
     error.code = "INVALID_TOKEN";
     error.status = 401;
     return next(error);
