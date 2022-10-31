@@ -10,3 +10,8 @@ export async function loginUser(user) {
   const res = await axios.post(`${host}/api/auth/login`, user);
   return res.data;
 }
+
+export async function sendForgetPasswordEmail(email) {
+  const res = await axios.post(`${host}/api/auth/forgetpassword`, email);
+  return res.data;
+}
