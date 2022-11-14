@@ -12,6 +12,7 @@ const app = express();
 // use initial middlewares
 app.use(express.json());
 app.use(cors());
+app.use(express.static(__dirname + "/public"));
 app.use(require("./routes"));
 
 // apply error middleware
