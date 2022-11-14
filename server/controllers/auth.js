@@ -65,11 +65,6 @@ const register = async (req, res, next) => {
 
     // get user role's id
     const userRole = await Role.findOne({ role });
-    if (!roles.includes(role)) {
-      const error = new Error("Oops, there is no role with name " + role);
-      error.status = 400;
-      return next(error);
-    }
 
     // hash the password
     const salt = await bcrypt.genSalt(10);
