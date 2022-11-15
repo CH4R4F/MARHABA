@@ -10,6 +10,7 @@ const defaultUser = {
   password: process.env.DEFAULT_USER_PASSWORD,
   verified: true,
   role: process.env.DEFAULT_ROLE,
+  refresh_token: null,
 };
 
 async function initDb() {

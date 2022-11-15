@@ -31,6 +31,17 @@ const login = async (req, res, next) => {
       return next(error);
     }
 
+    // store the refresh token in the database
+    const refresh_token = refreshGen(user._id, "7d");
+    user.refresh_token = refresh_token;
+    await user.save();
+
+    // send the refresh token in a cookie
+    res.cookie("refresh_token", refresh_token, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
     // login the user and send the token
     res.status(200).json({
       success: true,
