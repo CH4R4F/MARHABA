@@ -204,10 +204,41 @@ const verifyEmail = async (req, res, next) => {
   });
 };
 
+// method: GET
+// url: /api/auth/logout
+// access: Public
+const logout = async (req, res, next) => {
+  const refreshToken = req?.cookies?.refresh_token;
+
+  if (!refreshToken) {
+    const error = new Error("Invalid token");
+    error.status = 400;
+    return next(error);
+  }
+
+  const user = await User.findOne({
+    refresh_token: refreshToken,
+  });
+
+  if (!user) {
+    const error = new Error("Invalid token");
+    error.status = 404;
+    return next(error);
+  }
+
+  user.refresh_token = null;
+  await user.save();
+
+  res.clearCookie("refresh_token", { httpOnly: true });
+  res.status(200).json({
+    success: true,
+  });
+};
 module.exports = {
   login,
   register,
   forgetPassword,
   resetPassword,
   verifyEmail,
+  logout,
 };
