@@ -3,8 +3,7 @@ const crypto = require("crypto");
 const InputValidation = require("../utils/inputValidation");
 const User = require("../models/user");
 const Role = require("../models/role");
-const roles = process.env.ROLES.split(",");
-const tokenGen = require("../utils/tokenGen");
+const { accessGen, refreshGen } = require("../utils/tokenGen");
 const jwt = require("jsonwebtoken");
 const { sendConfirmationEmail, sendResetPasswordEmail } = require("../utils/emailSender");
 
@@ -36,7 +35,7 @@ const login = async (req, res, next) => {
     res.status(200).json({
       success: true,
       user,
-      token: tokenGen(user._id, "1d"),
+      token: accessGen(user._id, "1d"),
     });
   } catch (error) {
     return next(error);
@@ -93,7 +92,7 @@ const register = async (req, res, next) => {
     res.status(201).json({
       success: true,
       user: save,
-      token: tokenGen(save._id),
+      token: accessGen(save._id),
     });
   } catch (error) {
     error.status = 400;
