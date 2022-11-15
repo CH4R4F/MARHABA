@@ -79,6 +79,7 @@ const register = async (req, res, next) => {
       email,
       password: hashedPassword,
       verification_token,
+      refresh_token: null,
     };
     const newUser = new User(userData);
     newUser._roles = [userRole._id];
@@ -91,8 +92,6 @@ const register = async (req, res, next) => {
     // send success
     res.status(201).json({
       success: true,
-      user: save,
-      token: accessGen(save._id),
     });
   } catch (error) {
     error.status = 400;
