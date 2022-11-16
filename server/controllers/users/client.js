@@ -2,9 +2,11 @@
 // url: /api/user/client/me
 // access: Private - [Manager, Client]
 const getClientInfo = (req, res) => {
-  console.log(req.user);
-  console.log(`Bonjour ${req.user.first_name}, votre rôle est : Client`);
-  res.end();
+  const user = req.user;
+  res.status(200).json({
+    success: true,
+    data: user,
+  });
 };
 
 module.exports = {

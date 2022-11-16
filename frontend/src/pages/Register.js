@@ -17,6 +17,7 @@ const boilerplate = {
 
 const Register = () => {
   const [error, setError] = useState({ ...boilerplate, registration: "" });
+  const [sent, setSent] = useState(false);
   const [user, setUser] = useState({ ...boilerplate });
   const { setAuth } = useContext(AuthContext);
 
@@ -60,12 +61,29 @@ const Register = () => {
         setError({ ...error, registration: errorMessage });
         return;
       }
-      const _token = data.token;
-      saveItem("token", _token);
-      saveItem("user", data.user);
-      setAuth({ token: _token, user: data.user });
-      navigate("/");
+      setSent(true);
     }
+  }
+
+  if (sent) {
+    // centered card with a message
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
+          <div className="mb-4">
+            <p className="text-gray-700 text-lg">Registration successful</p>
+          </div>
+          <div className="flex items-center justify-between">
+            <Link to="/login" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Login
+            </Link>
+            <Link to="/" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Home
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
