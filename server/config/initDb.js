@@ -19,7 +19,7 @@ async function initDb() {
   await createDefaultUser();
 }
 
-async function createDefaultRoles() {
+function createDefaultRoles() {
   // check if role collection is empty
   RoleModel.countDocuments({}, (err, count) => {
     if (err) {
@@ -36,7 +36,7 @@ async function createDefaultRoles() {
   });
 }
 
-async function createDefaultUser() {
+function createDefaultUser() {
   // create and assign a role to default user if not exists
   UserModel.findOne({ email: defaultUser.email }, async (err, user) => {
     if (err) {
